@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { Livestreams } from '@/components/web/Livestreams'
 import { Noticias } from '@/components/web/Noticias'
 import { Accesos } from '@/components/web/Accesos'

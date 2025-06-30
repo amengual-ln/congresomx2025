@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { prisma } from '@/lib/db'
 import { NewsBody } from '@/components/web/NewsBody'
 import Link from 'next/link'

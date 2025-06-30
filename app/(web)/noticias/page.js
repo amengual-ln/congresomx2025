@@ -4,6 +4,7 @@ import { prisma } from '@/lib/db';
 import NewsCarousel from '@/components/web/NewsCarousel';
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import ImageWithFallback from '@/components/ImageWithFallback';
 
 export default async function NoticiasPage({ searchParams }) {
   const page = parseInt(searchParams.page || '1', 10);
@@ -21,6 +22,7 @@ export default async function NoticiasPage({ searchParams }) {
         slug: true,
         published_at: true,
         news_category_id: true,
+        image: true,
       },
     }),
     prisma.news.findMany({
@@ -33,6 +35,7 @@ export default async function NoticiasPage({ searchParams }) {
         slug: true,
         published_at: true,
         news_category_id: true,
+        image: true,
       },
     }),
     prisma.news.count(),
@@ -55,9 +58,9 @@ export default async function NoticiasPage({ searchParams }) {
               <Link href={`/noticias/${item.slug}`} className="block h-full w-full">
                 {/* Imagen de fondo */}
                 <div className="absolute inset-0">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src="/placeholder/square.png"
+                  <ImageWithFallback
+                    src={item.image ? 'https://www.canaldelcongreso.gob.mx/storage/' + item.image : '/placeholder/square.png'}
+                    fallbackSrc="/placeholder/square.png"
                     alt={item.title}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
@@ -67,7 +70,7 @@ export default async function NoticiasPage({ searchParams }) {
                 
                 {/* Contenido */}
                 <div className="relative h-full flex flex-col justify-end p-6 text-white">
-                  <h2 className="text-xl font-bold leading-tight line-clamp-3">
+                  <h2 className="text-xl font-bold leading-tight line-clamp-2">
                     {item.title}
                   </h2>
                   <time 

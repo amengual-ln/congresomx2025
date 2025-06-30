@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import ImageWithFallback from '@/components/ImageWithFallback';
 
 export default function NewsCarousel({ news = [], categories = [] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -80,12 +81,13 @@ export default function NewsCarousel({ news = [], categories = [] }) {
       
       {/* Imagen de fondo */}
       <div className="absolute inset-0 transition-opacity duration-1000 ease-in-out">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={news[currentIndex]?.image || '/placeholder/square.png'}
-          alt={news[currentIndex]?.title || 'Noticia destacada'}
-          className="w-full h-full object-cover"
-        />
+      <ImageWithFallback
+        key={`carousel-${currentIndex}`} // Importante para forzar re-montaje
+        src={news[currentIndex]?.image ? 'https://www.canaldelcongreso.gob.mx/storage/' + news[currentIndex]?.image : '/placeholder/square.png'}
+        fallbackSrc="/placeholder/square.png"
+        alt={news[currentIndex]?.title || 'Noticia destacada'}
+        className="w-full h-full object-cover"
+      />
       </div>
 
       {/* Contenido */}

@@ -1,0 +1,505 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model adicional_sections {
+  id             BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  name           String    @db.VarChar(255)
+  content_blocks String?   @db.LongText
+  body           String?   @db.LongText
+  slug           String    @unique(map: "adicional_sections_slug_unique") @db.VarChar(255)
+  created_at     DateTime? @db.Timestamp(0)
+  updated_at     DateTime? @db.Timestamp(0)
+}
+
+model ages {
+  id               BigInt             @id @default(autoincrement()) @db.UnsignedBigInt
+  description      String             @db.VarChar(255)
+  created_at       DateTime?          @db.Timestamp(0)
+  updated_at       DateTime?          @db.Timestamp(0)
+  postbox          postbox[]
+  postbox_defensor postbox_defensor[]
+}
+
+model banners {
+  id         BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  news_id    String    @db.Char(36)
+  position   Int       @default(1) @db.UnsignedTinyInt
+  created_at DateTime? @db.Timestamp(0)
+  updated_at DateTime? @db.Timestamp(0)
+  news       news      @relation(fields: [news_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "banners_news_id_foreign")
+
+  @@index([news_id], map: "banners_news_id_foreign")
+}
+
+model broadcasting {
+  id            String          @id @db.Char(36)
+  title         String          @db.VarChar(255)
+  created_at    DateTime?       @db.Timestamp(0)
+  updated_at    DateTime?       @db.Timestamp(0)
+  programming   programming[]
+  transmissions transmissions[]
+}
+
+model channels {
+  id            String          @id @db.Char(36)
+  name          String          @db.VarChar(255)
+  number        String          @db.VarChar(255)
+  color         String          @db.VarChar(255)
+  created_at    DateTime?       @db.Timestamp(0)
+  updated_at    DateTime?       @db.Timestamp(0)
+  programming   programming[]
+  transmissions transmissions[]
+}
+
+model council_sections {
+  id             BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  name           String    @db.VarChar(255)
+  content_blocks String?   @db.LongText
+  body           String?   @db.LongText
+  slug           String    @unique(map: "council_sections_slug_unique") @db.VarChar(255)
+  created_at     DateTime? @db.Timestamp(0)
+  updated_at     DateTime? @db.Timestamp(0)
+}
+
+model defensor_sections {
+  id             BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  name           String    @db.VarChar(255)
+  content_blocks String?   @db.LongText
+  body           String?   @db.LongText
+  slug           String    @unique(map: "defensor_sections_slug_unique") @db.VarChar(255)
+  created_at     DateTime? @db.Timestamp(0)
+  updated_at     DateTime? @db.Timestamp(0)
+}
+
+model events {
+  id            String    @id @db.Char(36)
+  created_at    DateTime? @db.Timestamp(0)
+  updated_at    DateTime? @db.Timestamp(0)
+  title         String    @db.VarChar(255)
+  link          String    @db.VarChar(255)
+  image_mobile  String    @db.VarChar(255)
+  image_desktop String    @db.VarChar(255)
+  state         Int       @default(1) @db.TinyInt
+}
+
+model failed_jobs {
+  id         BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid       String   @unique(map: "failed_jobs_uuid_unique") @db.VarChar(255)
+  connection String   @db.Text
+  queue      String   @db.Text
+  payload    String   @db.LongText
+  exception  String   @db.LongText
+  failed_at  DateTime @default(now()) @db.Timestamp(0)
+}
+
+model grupos_parlamentarios {
+  id           BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+  nombre       String         @db.VarChar(255)
+  abreviatura  String         @db.VarChar(255)
+  imagen       String?        @db.VarChar(255)
+  created_at   DateTime?      @db.Timestamp(0)
+  updated_at   DateTime?      @db.Timestamp(0)
+  legisladores legisladores[]
+}
+
+model legisladores {
+  id                       BigInt                 @id @default(autoincrement()) @db.UnsignedBigInt
+  Nombre                   String                 @db.VarChar(255)
+  Legislatura              String                 @db.VarChar(255)
+  grupos_parlamentarios_id BigInt?                @db.UnsignedBigInt
+  Perfil                   String?                @db.VarChar(255)
+  Tipo                     String?                @db.VarChar(255)
+  Estado                   String?                @db.VarChar(255)
+  Genero                   String                 @db.VarChar(255)
+  Distrito                 String?                @db.VarChar(255)
+  Posicion                 String?                @db.VarChar(255)
+  Estatus                  String                 @db.VarChar(255)
+  img_route                String                 @db.VarChar(255)
+  created_at               DateTime?              @db.Timestamp(0)
+  updated_at               DateTime?              @db.Timestamp(0)
+  grupos_parlamentarios    grupos_parlamentarios? @relation(fields: [grupos_parlamentarios_id], references: [id], onDelete: Restrict, map: "legisladores_grupos_parlamentarios_id_foreign")
+
+  @@index([grupos_parlamentarios_id], map: "legisladores_grupos_parlamentarios_id_foreign")
+}
+
+model migrations {
+  id        Int    @id @default(autoincrement()) @db.UnsignedInt
+  migration String @db.VarChar(255)
+  batch     Int
+}
+
+model model_has_permissions {
+  permission_id BigInt      @db.UnsignedBigInt
+  model_type    String      @db.VarChar(255)
+  model_id      BigInt      @db.UnsignedBigInt
+  permissions   permissions @relation(fields: [permission_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "model_has_permissions_permission_id_foreign")
+
+  @@id([permission_id, model_id, model_type])
+  @@index([model_id, model_type], map: "model_has_permissions_model_id_model_type_index")
+}
+
+model model_has_roles {
+  role_id    BigInt @db.UnsignedBigInt
+  model_type String @db.VarChar(255)
+  model_id   BigInt @db.UnsignedBigInt
+  roles      roles  @relation(fields: [role_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "model_has_roles_role_id_foreign")
+
+  @@id([role_id, model_id, model_type])
+  @@index([model_id, model_type], map: "model_has_roles_model_id_model_type_index")
+}
+
+model news {
+  id               String           @id @db.Char(36)
+  created_at       DateTime?        @db.Timestamp(0)
+  updated_at       DateTime?        @db.Timestamp(0)
+  title            String           @db.VarChar(255)
+  published_at     DateTime         @db.DateTime(0)
+  tag              String           @db.VarChar(255)
+  image            String?          @db.VarChar(255)
+  body             String           @db.Text
+  slug             String           @unique(map: "news_slug_unique") @db.VarChar(255)
+  user_id          BigInt?          @db.UnsignedBigInt
+  news_category_id String?          @db.Char(36)
+  views            Int              @default(0)
+  banners          banners[]
+  news_categories  news_categories? @relation(fields: [news_category_id], references: [id], onUpdate: Restrict, map: "news_news_category_id_foreign")
+  users            users?           @relation(fields: [user_id], references: [id], onUpdate: Restrict, map: "news_user_id_foreign")
+  sphera_news      sphera_news[]
+
+  @@index([news_category_id], map: "news_news_category_id_foreign")
+  @@index([user_id], map: "news_user_id_foreign")
+}
+
+model news_categories {
+  id         String    @id @db.Char(36)
+  name       String    @db.VarChar(255)
+  sphera_id  Int       @db.UnsignedTinyInt
+  slug       String    @unique(map: "news_categories_slug_unique") @db.VarChar(255)
+  created_at DateTime? @db.Timestamp(0)
+  updated_at DateTime? @db.Timestamp(0)
+  news       news[]
+}
+
+model notices {
+  id            String    @id @db.Char(36)
+  title         String    @db.VarChar(255)
+  link          String?   @db.VarChar(255)
+  image_mobile  String    @db.VarChar(255)
+  image_desktop String    @db.VarChar(255)
+  state         Int       @default(1) @db.TinyInt
+  created_at    DateTime? @db.Timestamp(0)
+  updated_at    DateTime? @db.Timestamp(0)
+}
+
+model password_reset_tokens {
+  email      String    @id @db.VarChar(255)
+  token      String    @db.VarChar(255)
+  created_at DateTime? @db.Timestamp(0)
+}
+
+model permissions {
+  id                    BigInt                  @id @default(autoincrement()) @db.UnsignedBigInt
+  name                  String                  @db.VarChar(255)
+  guard_name            String                  @db.VarChar(255)
+  created_at            DateTime?               @db.Timestamp(0)
+  updated_at            DateTime?               @db.Timestamp(0)
+  model_has_permissions model_has_permissions[]
+  role_has_permissions  role_has_permissions[]
+
+  @@unique([name, guard_name], map: "permissions_name_guard_name_unique")
+}
+
+model personal_access_tokens {
+  id             BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  tokenable_type String    @db.VarChar(255)
+  tokenable_id   BigInt    @db.UnsignedBigInt
+  name           String    @db.VarChar(255)
+  token          String    @unique(map: "personal_access_tokens_token_unique") @db.VarChar(64)
+  abilities      String?   @db.Text
+  last_used_at   DateTime? @db.Timestamp(0)
+  expires_at     DateTime? @db.Timestamp(0)
+  created_at     DateTime? @db.Timestamp(0)
+  updated_at     DateTime? @db.Timestamp(0)
+
+  @@index([tokenable_type, tokenable_id], map: "personal_access_tokens_tokenable_type_tokenable_id_index")
+}
+
+model postbox {
+  id              String         @id @db.Char(36)
+  name            String         @db.VarChar(255)
+  last_name       String         @db.VarChar(255)
+  email           String         @db.VarChar(255)
+  state_id        BigInt?        @db.UnsignedBigInt
+  age_id          BigInt?        @db.UnsignedBigInt
+  sex_id          BigInt?        @db.UnsignedBigInt
+  postbox_type_id BigInt?        @db.UnsignedBigInt
+  message         String         @db.Text
+  answer          String?        @db.Text
+  answered_by     BigInt?        @db.UnsignedBigInt
+  created_at      DateTime?      @db.Timestamp(0)
+  updated_at      DateTime?      @db.Timestamp(0)
+  ages            ages?          @relation(fields: [age_id], references: [id], onUpdate: Restrict, map: "postbox_age_id_foreign")
+  users           users?         @relation(fields: [answered_by], references: [id], onUpdate: Restrict, map: "postbox_answered_by_foreign")
+  postbox_types   postbox_types? @relation(fields: [postbox_type_id], references: [id], onUpdate: Restrict, map: "postbox_postbox_type_id_foreign")
+  sex             sex?           @relation(fields: [sex_id], references: [id], onUpdate: Restrict, map: "postbox_sex_id_foreign")
+  states          states?        @relation(fields: [state_id], references: [id], onUpdate: Restrict, map: "postbox_state_id_foreign")
+
+  @@index([age_id], map: "postbox_age_id_foreign")
+  @@index([answered_by], map: "postbox_answered_by_foreign")
+  @@index([postbox_type_id], map: "postbox_postbox_type_id_foreign")
+  @@index([sex_id], map: "postbox_sex_id_foreign")
+  @@index([state_id], map: "postbox_state_id_foreign")
+}
+
+model postbox_answers {
+  id          String    @id @db.Char(36)
+  name        String    @db.VarChar(255)
+  description String    @db.Text
+  created_at  DateTime? @db.Timestamp(0)
+  updated_at  DateTime? @db.Timestamp(0)
+  state       Int       @default(1) @db.TinyInt
+}
+
+model postbox_defensor {
+  id              String         @id @db.Char(36)
+  name            String         @db.VarChar(255)
+  last_name       String         @db.VarChar(255)
+  email           String         @db.VarChar(255)
+  state_id        BigInt?        @db.UnsignedBigInt
+  age_id          BigInt?        @db.UnsignedBigInt
+  sex_id          BigInt?        @db.UnsignedBigInt
+  postbox_type_id BigInt?        @db.UnsignedBigInt
+  message         String         @db.Text
+  answer          String?        @db.Text
+  answered_by     BigInt?        @db.UnsignedBigInt
+  created_at      DateTime?      @db.Timestamp(0)
+  updated_at      DateTime?      @db.Timestamp(0)
+  ages            ages?          @relation(fields: [age_id], references: [id], onUpdate: Restrict, map: "postbox_defensor_age_id_foreign")
+  users           users?         @relation(fields: [answered_by], references: [id], onUpdate: Restrict, map: "postbox_defensor_answered_by_foreign")
+  postbox_types   postbox_types? @relation(fields: [postbox_type_id], references: [id], onUpdate: Restrict, map: "postbox_defensor_postbox_type_id_foreign")
+  sex             sex?           @relation(fields: [sex_id], references: [id], onUpdate: Restrict, map: "postbox_defensor_sex_id_foreign")
+  states          states?        @relation(fields: [state_id], references: [id], onUpdate: Restrict, map: "postbox_defensor_state_id_foreign")
+
+  @@index([age_id], map: "postbox_defensor_age_id_foreign")
+  @@index([answered_by], map: "postbox_defensor_answered_by_foreign")
+  @@index([postbox_type_id], map: "postbox_defensor_postbox_type_id_foreign")
+  @@index([sex_id], map: "postbox_defensor_sex_id_foreign")
+  @@index([state_id], map: "postbox_defensor_state_id_foreign")
+}
+
+model postbox_types {
+  id               BigInt             @id @default(autoincrement()) @db.UnsignedBigInt
+  description      String             @db.VarChar(255)
+  created_at       DateTime?          @db.Timestamp(0)
+  updated_at       DateTime?          @db.Timestamp(0)
+  postbox          postbox[]
+  postbox_defensor postbox_defensor[]
+}
+
+model programas_radiocongreso {
+  id               BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  title            String    @db.VarChar(255)
+  subtitle         String    @db.VarChar(255)
+  duration         Int
+  status           String    @db.VarChar(255)
+  type             String    @db.VarChar(255)
+  publication_date DateTime  @db.Date
+  publication_time DateTime  @db.Time(0)
+  description      String    @db.Text
+  file_route       String    @db.VarChar(255)
+  image_route      String    @db.VarChar(255)
+  created_at       DateTime? @db.Timestamp(0)
+  updated_at       DateTime? @db.Timestamp(0)
+}
+
+model programming {
+  id              String        @id @db.Char(36)
+  title           String        @db.VarChar(255)
+  start_at        DateTime      @db.DateTime(0)
+  classification  String?       @db.VarChar(255)
+  origin          String?       @db.VarChar(255)
+  cassette        String?       @db.VarChar(255)
+  duration        Int?
+  broadcasting_id String?       @db.Char(36)
+  channel_id      String        @db.Char(36)
+  created_at      DateTime?     @db.Timestamp(0)
+  updated_at      DateTime?     @db.Timestamp(0)
+  state           Int           @default(1) @db.TinyInt
+  broadcasting    broadcasting? @relation(fields: [broadcasting_id], references: [id], onUpdate: Restrict, map: "programming_broadcasting_id_foreign")
+  channels        channels      @relation(fields: [channel_id], references: [id], onUpdate: Restrict, map: "programming_channel_id_foreign")
+
+  @@index([broadcasting_id], map: "programming_broadcasting_id_foreign")
+  @@index([channel_id], map: "programming_channel_id_foreign")
+}
+
+model role_has_permissions {
+  permission_id BigInt      @db.UnsignedBigInt
+  role_id       BigInt      @db.UnsignedBigInt
+  permissions   permissions @relation(fields: [permission_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "role_has_permissions_permission_id_foreign")
+  roles         roles       @relation(fields: [role_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "role_has_permissions_role_id_foreign")
+
+  @@id([permission_id, role_id])
+  @@index([role_id], map: "role_has_permissions_role_id_foreign")
+}
+
+model roles {
+  id                   BigInt                 @id @default(autoincrement()) @db.UnsignedBigInt
+  name                 String                 @db.VarChar(255)
+  guard_name           String                 @db.VarChar(255)
+  created_at           DateTime?              @db.Timestamp(0)
+  updated_at           DateTime?              @db.Timestamp(0)
+  model_has_roles      model_has_roles[]
+  role_has_permissions role_has_permissions[]
+
+  @@unique([name, guard_name], map: "roles_name_guard_name_unique")
+}
+
+model sex {
+  id               BigInt             @id @default(autoincrement()) @db.UnsignedBigInt
+  description      String             @db.VarChar(255)
+  created_at       DateTime?          @db.Timestamp(0)
+  updated_at       DateTime?          @db.Timestamp(0)
+  postbox          postbox[]
+  postbox_defensor postbox_defensor[]
+}
+
+model signals {
+  id            String          @id @db.Char(36)
+  created_at    DateTime?       @db.Timestamp(0)
+  updated_at    DateTime?       @db.Timestamp(0)
+  name          String          @db.VarChar(255)
+  url           String          @db.VarChar(255)
+  transmissions transmissions[]
+}
+
+model sphera_news {
+  id         String    @id @db.Char(36)
+  sphera_id  Int       @db.UnsignedInt
+  news_id    String    @db.Char(36)
+  created_at DateTime? @db.Timestamp(0)
+  updated_at DateTime? @db.Timestamp(0)
+  news       news      @relation(fields: [news_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "sphera_news_news_id_foreign")
+
+  @@index([news_id], map: "sphera_news_news_id_foreign")
+}
+
+model states {
+  id               BigInt             @id @default(autoincrement()) @db.UnsignedBigInt
+  name             String             @db.VarChar(255)
+  created_at       DateTime?          @db.Timestamp(0)
+  updated_at       DateTime?          @db.Timestamp(0)
+  postbox          postbox[]
+  postbox_defensor postbox_defensor[]
+}
+
+model transmission_images {
+  id            String          @id @db.Char(36)
+  created_at    DateTime?       @db.Timestamp(0)
+  updated_at    DateTime?       @db.Timestamp(0)
+  title         String          @db.VarChar(255)
+  url           String          @db.VarChar(255)
+  transmissions transmissions[]
+}
+
+model transmissions {
+  id                    String               @id @db.Char(36)
+  title                 String               @db.VarChar(255)
+  subtitle              String?              @db.VarChar(255)
+  type                  Int                  @db.TinyInt
+  position              Int                  @db.TinyInt
+  image                 String?              @db.VarChar(255)
+  slug                  String               @unique(map: "transmissions_slug_unique") @db.VarChar(255)
+  state                 Int                  @db.TinyInt
+  start                 DateTime?            @db.DateTime(0)
+  end                   DateTime?            @db.DateTime(0)
+  transmission_image_id String?              @db.Char(36)
+  broadcasting_id       String?              @db.Char(36)
+  channel_id            String?              @db.Char(36)
+  signal_id             String?              @db.Char(36)
+  url                   String?              @db.VarChar(255)
+  created_at            DateTime?            @db.Timestamp(0)
+  updated_at            DateTime?            @db.Timestamp(0)
+  deleted_at            DateTime?            @db.Timestamp(0)
+  broadcasting          broadcasting?        @relation(fields: [broadcasting_id], references: [id], onUpdate: Restrict, map: "transmissions_broadcasting_id_foreign")
+  channels              channels?            @relation(fields: [channel_id], references: [id], onUpdate: Restrict, map: "transmissions_channel_id_foreign")
+  signals               signals?             @relation(fields: [signal_id], references: [id], onUpdate: Restrict, map: "transmissions_signal_id_foreign")
+  transmission_images   transmission_images? @relation(fields: [transmission_image_id], references: [id], onUpdate: Restrict, map: "transmissions_transmission_image_id_foreign")
+
+  @@index([broadcasting_id], map: "transmissions_broadcasting_id_foreign")
+  @@index([channel_id], map: "transmissions_channel_id_foreign")
+  @@index([signal_id], map: "transmissions_signal_id_foreign")
+  @@index([transmission_image_id], map: "transmissions_transmission_image_id_foreign")
+}
+
+model transparency_sections {
+  id                       BigInt                     @id @default(autoincrement()) @db.UnsignedBigInt
+  name                     String                     @db.VarChar(255)
+  description              String                     @db.Text
+  content_blocks           String?                    @db.LongText
+  body                     String?                    @db.LongText
+  created_at               DateTime?                  @db.Timestamp(0)
+  updated_at               DateTime?                  @db.Timestamp(0)
+  slug                     String                     @unique(map: "transparency_sections_slug_unique") @db.VarChar(255)
+  image                    String?                    @db.VarChar(255)
+  transparency_subsections transparency_subsections[]
+}
+
+model transparency_subsections {
+  id                      BigInt                @id @default(autoincrement()) @db.UnsignedBigInt
+  transparency_section_id BigInt                @db.UnsignedBigInt
+  name                    String                @db.VarChar(255)
+  slug                    String                @unique(map: "transparency_subsections_slug_unique") @db.VarChar(255)
+  description             String?               @db.Text
+  created_at              DateTime?             @db.Timestamp(0)
+  updated_at              DateTime?             @db.Timestamp(0)
+  content_blocks          String?               @db.LongText
+  transparency_sections   transparency_sections @relation(fields: [transparency_section_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "transparency_subsections_transparency_section_id_foreign")
+
+  @@index([transparency_section_id], map: "transparency_subsections_transparency_section_id_foreign")
+}
+
+model users {
+  id                BigInt             @id @default(autoincrement()) @db.UnsignedBigInt
+  name              String             @db.VarChar(255)
+  email             String             @unique(map: "users_email_unique") @db.VarChar(255)
+  email_verified_at DateTime?          @db.Timestamp(0)
+  password          String             @db.VarChar(255)
+  remember_token    String?            @db.VarChar(100)
+  created_at        DateTime?          @db.Timestamp(0)
+  updated_at        DateTime?          @db.Timestamp(0)
+  news              news[]
+  postbox           postbox[]
+  postbox_defensor  postbox_defensor[]
+}
+
+model video_categories {
+  id         String    @id @db.Char(36)
+  name       String    @db.VarChar(255)
+  slug       String    @unique(map: "video_categories_slug_unique") @db.VarChar(255)
+  position   Int       @default(0)
+  created_at DateTime? @db.Timestamp(0)
+  updated_at DateTime? @db.Timestamp(0)
+  videos     videos[]
+}
+
+model videos {
+  id                String            @id @db.Char(36)
+  title             String?           @db.VarChar(255)
+  url               String?           @db.VarChar(255)
+  youtube_id        String            @db.VarChar(255)
+  image             String?           @db.VarChar(255)
+  video_category_id String?           @db.Char(36)
+  state             Int               @default(1) @db.TinyInt
+  views             Int               @default(0) @db.UnsignedInt
+  created_at        DateTime?         @db.Timestamp(0)
+  updated_at        DateTime?         @db.Timestamp(0)
+  video_categories  video_categories? @relation(fields: [video_category_id], references: [id], onUpdate: Restrict, map: "videos_video_category_id_foreign")
+
+  @@index([video_category_id], map: "videos_video_category_id_foreign")
+}

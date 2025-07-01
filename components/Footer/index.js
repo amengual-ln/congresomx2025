@@ -5,11 +5,11 @@ export const Footer = () => {
   return (
     <footer className='flex justify-between items-center bg-gray-600 text-white pt-4'>
       <div className='w-full flex flex-col justify-between items-center'>
-        <div className='w-full max-w-[1400px] mx-auto grid grid-cols-2 gap-8 p-4'>
+        <div className='w-full max-w-[1400px] mx-auto grid md:grid-cols-2 gap-8 p-4'>
             <div>
                 <h2 className='text-lg font-bold'>CONTÁCTENOS</h2>
                 <form action="#" className='pt-2'>
-                    <div className='flex gap-4 w-full'>
+                    <div className='flex flex-col md:flex-row gap-4 w-full'>
                         <div className='flex flex-col gap-1 w-full'>
                             <label htmlFor="nombre">Nombre</label>
                             <input type="text" className='bg-gray-500 focus:bg-[#FAFAFA] focus:text-black rounded mb-2 -mt-1 outline-none p-2' />
@@ -19,7 +19,7 @@ export const Footer = () => {
                             <input type="text" className='bg-gray-500 focus:bg-[#FAFAFA] focus:text-black rounded mb-2 -mt-1 outline-none p-2' />
                         </div>
                     </div>
-                    <div className='flex gap-4 w-full'>
+                    <div className='flex flex-col md:flex-row gap-4 w-full'>
                         <div className='flex flex-col gap-1 w-full'>
                             <label htmlFor="email">Email</label>
                             <input type="email" className='bg-gray-500 focus:bg-[#FAFAFA] focus:text-black rounded mb-2 -mt-1 outline-none p-2' />
@@ -29,7 +29,7 @@ export const Footer = () => {
                             <input type="text" className='bg-gray-500 focus:bg-[#FAFAFA] focus:text-black rounded mb-2 -mt-1 outline-none p-2' />
                         </div>
                     </div>
-                    <div className='flex gap-4 w-full'>
+                    <div className='flex flex-col md:flex-row gap-4 w-full'>
                         <div className='flex flex-col gap-1 w-full'>
                             <label htmlFor="empresa">Empresa</label>
                             <input type="text" className='bg-gray-500 focus:bg-[#FAFAFA] focus:text-black rounded mb-2 -mt-1 outline-none p-2' />
@@ -39,7 +39,7 @@ export const Footer = () => {
                             <input type="text" className='bg-gray-500 focus:bg-[#FAFAFA] focus:text-black rounded mb-2 -mt-1 outline-none p-2' />
                         </div>
                     </div>
-                    <div className='flex gap-4 w-full'>
+                    <div className='flex flex-col md:flex-row gap-4 w-full'>
                         <div className='flex flex-col gap-1 w-full'>
                             <label htmlFor="ciudad">Ciudad</label>
                             <input type="text" className='bg-gray-500 focus:bg-[#FAFAFA] focus:text-black rounded mb-2 -mt-1 outline-none p-2' />
@@ -53,7 +53,7 @@ export const Footer = () => {
                         <label htmlFor="mensaje">Mensaje</label>
                         <textarea name="mensaje" id="mensaje" cols="30" rows="5" className='bg-gray-500 focus:bg-[#FAFAFA] focus:text-black rounded mb-2 -mt-1 outline-none p-2'></textarea>
                     </div>
-                    <div className='flex justify-end'>
+                    <div className='flex flex-col md:flex-row justify-end mt-4'>
                         <button type="submit" className='bg-[#3b0764] text-white brightness-120 hover:brightness-100 opacity-75 hover:opacity-100 transition cursor-pointer px-4 py-2 rounded'>Enviar</button>
                     </div>
                 </form>
